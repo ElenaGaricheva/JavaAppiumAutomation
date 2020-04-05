@@ -6,10 +6,12 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.pagefactory.ByAll;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -69,7 +71,7 @@ public class WikipediaSearchTests {
     }
 
     @Test
-    public void cancelSearchArticles() {
+    public void cancelSearchArticlesTest() {
 
         waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
@@ -79,15 +81,25 @@ public class WikipediaSearchTests {
                 By.id("org.wikipedia:id/search_container"),
                 "Search container not found");
 
+        waitForElementPresentAndSendKeys(
+                By.id("org.wikipedia:id/search_plate"),
+                "JAVA",
+                "Search field not found");
+
+        //В установленной мной версии приложения(последней) нет id контейнера у позиции результата поиска
+        waitForElementsPresent(
+                new ByAll(By.xpath("//*[@resource-id = 'org.wikipedia:id/search_results_list']//*[@class = 'android.view.ViewGroup']")),
+                "Search results list is empty"
+        );
+
         waitForElementPresentAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_toolbar']//*[@class = 'android.widget.ImageButton']"),
+                By.id("org.wikipedia:id/search_close_btn"),
                 "Cancel button not found"
         );
 
-        //В установленной мной версии приложения(последней) вместо X для отмены поиска стрелочка "Назад" без id
         waitForElementNotPresent(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_toolbar']//*[@class = 'android.widget.ImageButton']"),
-                "Cancel button is still present on page",
+                By.id("org.wikipedia:id/search_results_list"),
+                "Search results list is still present on page",
                 5
         );
     }
@@ -118,9 +130,23 @@ public class WikipediaSearchTests {
         return wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
     }
 
+    private Boolean waitForElementNotPresent(By by, String error_message) {
+        return waitForElementNotPresent(by, error_message, 5);
+    }
+
     private void waitForTextElementPresent(By by, String expectedText, String error_message) {
         WebElement element = waitForElementPresent(by, error_message);
         String textOfElement = element.getText();
         assertEquals(error_message, expectedText, textOfElement);
+    }
+
+    private List<WebElement> waitForElementsPresent(ByAll byAll, String error_message, long timeOutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
+        wait.withMessage(error_message + '\n');
+        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(byAll));
+    }
+
+    private List<WebElement> waitForElementsPresent(ByAll byAll, String error_message) {
+        return waitForElementsPresent(byAll, error_message, 5);
     }
 }
