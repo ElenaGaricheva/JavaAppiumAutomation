@@ -99,8 +99,7 @@ public class WikipediaSearchTests {
 
         waitForElementNotPresent(
                 By.id("org.wikipedia:id/search_results_list"),
-                "Search results list is still present on page",
-                5
+                "Search results list is still present on page"
         );
     }
 
