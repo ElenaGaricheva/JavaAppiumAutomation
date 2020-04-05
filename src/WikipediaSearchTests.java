@@ -92,6 +92,12 @@ public class WikipediaSearchTests {
                 "Search results list is empty"
         );
 
+        checkTextEachElementsOfList(
+                new ByAll(By.xpath("//*[@resource-id = 'org.wikipedia:id/search_results_list']//*[@class = 'android.view.ViewGroup']")),
+                "Java",
+                "Not all elements contain expected text"
+        );
+
         waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/search_close_btn"),
                 "Cancel button not found"
@@ -147,5 +153,12 @@ public class WikipediaSearchTests {
 
     private List<WebElement> waitForElementsPresent(ByAll byAll, String error_message) {
         return waitForElementsPresent(byAll, error_message, 5);
+    }
+
+    private void checkTextEachElementsOfList(ByAll byAll, String expectedText, String error_message) {
+        List<WebElement> listElements = waitForElementsPresent(byAll, error_message);
+        listElements.stream()
+                .map(el -> el.findElement(By.id("org.wikipedia:id/page_list_item_title")).getText())
+                .forEach(txt -> assertTrue(error_message, txt.contains(expectedText)));
     }
 }
