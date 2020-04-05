@@ -11,6 +11,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
 
+import static org.junit.Assert.*;
+
 public class WikipediaSearchTests {
 
     private AppiumDriver driver;
@@ -25,6 +27,7 @@ public class WikipediaSearchTests {
         capabilities.setCapability("automationName", "Appium");
         capabilities.setCapability("appPackage", "org.wikipedia");
         capabilities.setCapability("appActivity", ".main.MainActivity");
+        //Приложение установлено на эмуляторе через Google Play. Скачанное по ссылке падает при запуске.
         //capabilities.setCapability("app", "/Users/elenagariceva/Desktop/JavaAppiumAutomation/apks/org.wikipedia.apk");
 
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
@@ -47,9 +50,14 @@ public class WikipediaSearchTests {
                 By.id("org.wikipedia:id/search_container"),
                 "Search container not found");
 
+        waitForTextElementPresent(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Search Wikipedia",
+                "Expected text not found"
+        );
 
         waitForElementPresentAndSendKeys(
-                By.id("org.wikipedia:id/search_src_text"),
+                By.id("org.wikipedia:id/search_plate"),
                 "JAVA",
                 "Search field not found");
 
@@ -72,12 +80,13 @@ public class WikipediaSearchTests {
                 "Search container not found");
 
         waitForElementPresentAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_toolbar']/..//*[@class = 'android.widget.ImageButton']"),
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_toolbar']//*[@class = 'android.widget.ImageButton']"),
                 "Cancel button not found"
         );
 
+        //В установленной мной версии приложения(последней) вместо X для отмены поиска стрелочка "Назад" без id
         waitForElementNotPresent(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_toolbar']/..//*[@class = 'android.widget.ImageButton']"),
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_toolbar']//*[@class = 'android.widget.ImageButton']"),
                 "Cancel button is still present on page",
                 5
         );
@@ -86,15 +95,12 @@ public class WikipediaSearchTests {
     private WebElement waitForElementPresent(By by, String error_message, long timeOutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
         wait.withMessage(error_message + '\n');
-        return wait.until(
-                ExpectedConditions.presenceOfElementLocated(by));
-
-    };
+        return wait.until(ExpectedConditions.presenceOfElementLocated(by));
+    }
 
     private WebElement waitForElementPresent(By by, String error_message) {
-        return waitForElementPresent(by,error_message,5);
-
-    };
+        return waitForElementPresent(by, error_message, 5);
+    }
 
     private void waitForElementPresentAndClick(By by, String error_message) {
         WebElement element = waitForElementPresent(by, error_message, 5);
@@ -109,7 +115,12 @@ public class WikipediaSearchTests {
     private Boolean waitForElementNotPresent(By by, String error_message, long timeOutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
         wait.withMessage(error_message + '\n');
-        return wait.until(
-                ExpectedConditions.invisibilityOfElementLocated(by));
-    };
+        return wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
+    }
+
+    private void waitForTextElementPresent(By by, String expectedText, String error_message) {
+        WebElement element = waitForElementPresent(by, error_message);
+        String textOfElement = element.getText();
+        assertEquals(error_message, expectedText, textOfElement);
+    }
 }
