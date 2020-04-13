@@ -46,6 +46,10 @@ public class WikipediaSearchTests {
     @Test
     public void searchArticlesTest() {
 
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Button for setup skip not found");
+
         searchArticles("JAVA");
 
         //В установленной мной версии приложения(последней) нет id контейнера у позиции результата поиска
@@ -57,6 +61,10 @@ public class WikipediaSearchTests {
 
     @Test
     public void cancelSearchArticlesTest() {
+
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Button for setup skip not found");
 
         searchArticles("JAVA");
 
@@ -86,6 +94,10 @@ public class WikipediaSearchTests {
     @Test
     public void swipeArticleTest() {
 
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Button for setup skip not found");
+
         searchArticles("Appium");
 
         //В установленной мной версии приложения(последней) нет id контейнера у позиции результата поиска
@@ -103,6 +115,10 @@ public class WikipediaSearchTests {
 
     @Test
     public void saveArticleToMyListAndDelete() throws InterruptedException {
+
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Button for setup skip not found");
 
         searchArticles("Appium");
 
@@ -166,19 +182,10 @@ public class WikipediaSearchTests {
     }
 
     private void searchArticles(String articleName) {
-        waitForElementPresentAndClick(
-                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
-                "Button for setup skip not found");
 
         waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/search_container"),
                 "Search container not found");
-
-        waitForTextElementPresent(
-                By.id("org.wikipedia:id/search_src_text"),
-                "Search Wikipedia",
-                "Expected text not found"
-        );
 
         waitForElementPresentAndSendKeys(
                 By.id("org.wikipedia:id/search_plate"),
@@ -203,6 +210,7 @@ public class WikipediaSearchTests {
 
     private void waitForElementPresentAndSendKeys(By by, String value, String error_message) {
         WebElement element = waitForElementPresent(by, error_message);
+        element.clear();
         element.sendKeys(value);
     }
 
