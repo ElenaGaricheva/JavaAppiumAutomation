@@ -98,7 +98,7 @@ public class WikipediaSearchTests {
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Button for setup skip not found");
 
-        searchArticle("Appium");
+        searchAndOpenArticle("Appium");
 
         swipeUpToFindElement(
                 By.xpath("//*[@text = 'View page in browser']"),
@@ -170,6 +170,95 @@ public class WikipediaSearchTests {
 
     }
 
+    @Test
+    public void saveTwoArticlesAndDeleteOne() {
+        String firstArticle = "Java (programming language)";
+        String secondArticle = "Appium";
+
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Button for setup skip not found");
+
+        searchAndOpenArticle(firstArticle);
+
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/article_menu_bookmark"),
+                "Button for create bookmark not found"
+        );
+
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/onboarding_button"),
+                "Onboarding button not found"
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[@resource-id = 'org.wikipedia:id/item_title' and @text = 'Saved']"),
+                "List with saved articles not found"
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[@content-desc = 'Navigate up']"),
+                "Button for return to search not found"
+        );
+
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Cancel button not found"
+        );
+
+        searchAndOpenArticle(secondArticle);
+
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/article_menu_bookmark"),
+                "Button for create bookmark not found"
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[@resource-id = 'org.wikipedia:id/item_title' and @text = 'Saved']"),
+                "List with saved articles not found"
+        );
+
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/page_toolbar_button_show_overflow_menu"),
+                "More options button not found"
+        );
+
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/page_action_overflow_reading_lists"),
+                "Reading list button not found"
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[@resource-id = 'android:id/button2' and @text = 'NO THANKS']"),
+                "Button for dismiss sync reading list not found"
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[@resource-id = 'org.wikipedia:id/item_title' and @text = 'Saved']"),
+                "Test list not found"
+        );
+
+        swipeElementToLeft(
+                By.xpath("//*[@text = '" + firstArticle +"']"),
+                "Saved article not found"
+        );
+
+        waitForElementNotPresent(
+                By.xpath("//*[@text = '" + firstArticle +"']"),
+                "Article is still present on page"
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[@text = '" + secondArticle +"']"),
+                "Article not found"
+                );
+
+        waitForElementPresent(
+                By.xpath("//*[@class = 'android.view.View' and @text = '" + secondArticle + "']"),
+                "Article name not the same secondArticleName"
+        );
+    }
+
     private void searchArticle(String articleName) {
 
         waitForElementPresentAndClick(
@@ -180,11 +269,6 @@ public class WikipediaSearchTests {
                 By.id("org.wikipedia:id/search_plate"),
                 articleName,
                 "Search field not found");
-
-        waitForElementPresentAndClick(
-                By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_title' and @text ='" + articleName + "']"),
-                "Article not found"
-        );
     }
 
     private void searchAndOpenArticle(String articleName) {
