@@ -1,9 +1,11 @@
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.pagefactory.ByAll;
@@ -44,24 +46,7 @@ public class WikipediaSearchTests {
     @Test
     public void searchArticlesTest() {
 
-        waitForElementPresentAndClick(
-                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
-                "Button for setup skip not found");
-
-        waitForElementPresentAndClick(
-                By.id("org.wikipedia:id/search_container"),
-                "Search container not found");
-
-        waitForTextElementPresent(
-                By.id("org.wikipedia:id/search_src_text"),
-                "Search Wikipedia",
-                "Expected text not found"
-        );
-
-        waitForElementPresentAndSendKeys(
-                By.id("org.wikipedia:id/search_plate"),
-                "JAVA",
-                "Search field not found");
+        searchArticles("JAVA");
 
         //В установленной мной версии приложения(последней) нет id контейнера у позиции результата поиска
         waitForElementPresent(
@@ -73,18 +58,7 @@ public class WikipediaSearchTests {
     @Test
     public void cancelSearchArticlesTest() {
 
-        waitForElementPresentAndClick(
-                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
-                "Button for setup skip not found");
-
-        waitForElementPresentAndClick(
-                By.id("org.wikipedia:id/search_container"),
-                "Search container not found");
-
-        waitForElementPresentAndSendKeys(
-                By.id("org.wikipedia:id/search_plate"),
-                "JAVA",
-                "Search field not found");
+        searchArticles("JAVA");
 
         //В установленной мной версии приложения(последней) нет id контейнера у позиции результата поиска
         waitForElementsPresent(
@@ -109,6 +83,109 @@ public class WikipediaSearchTests {
         );
     }
 
+    @Test
+    public void swipeArticleTest() {
+
+        searchArticles("Appium");
+
+        //В установленной мной версии приложения(последней) нет id контейнера у позиции результата поиска
+        waitForElementPresentAndClick(
+                By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_title' and @text = 'Appium']"),
+                "Article not found"
+        );
+
+        swipeUpToFindElement(
+                By.xpath("//*[@text = 'View page in browser']"),
+                "Link at bottom of the page not found",
+                20
+        );
+    }
+
+    @Test
+    public void saveArticleToMyListAndDelete() throws InterruptedException {
+
+        searchArticles("Appium");
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_title' and @text = 'Appium']"),
+                "Article not found"
+        );
+
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/article_menu_bookmark"),
+                "Button for create bookmark not found"
+        );
+
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/onboarding_button"),
+                "Onboarding button not found"
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[@resource-id = 'org.wikipedia:id/item_title' and @text = 'Saved']"),
+                "List with saved articles not found"
+        );
+
+
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/page_toolbar_button_show_overflow_menu"),
+                "More options button not found"
+        );
+
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/page_action_overflow_reading_lists"),
+                "Reading list button not found"
+        );
+
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[@resource-id = 'android:id/button2' and @text = 'NO THANKS']"),
+                "Button for dismiss sync reading list not found"
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[@resource-id = 'org.wikipedia:id/item_title' and @text = 'Saved']"),
+                "Test list not found"
+        );
+
+        waitForElementPresent(
+                By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_title' and @text = 'Appium']"),
+                "Saved article not found"
+        );
+
+        swipeElementToLeft(
+                By.xpath("//*[@text = 'Appium']"),
+                "Saved article not found"
+        );
+
+        waitForElementNotPresent(
+                By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_title' and @text = 'Appium']"),
+                "Saved article is still present on page"
+                );
+
+    }
+
+    private void searchArticles(String articleName) {
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Button for setup skip not found");
+
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Search container not found");
+
+        waitForTextElementPresent(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Search Wikipedia",
+                "Expected text not found"
+        );
+
+        waitForElementPresentAndSendKeys(
+                By.id("org.wikipedia:id/search_plate"),
+                articleName,
+                "Search field not found");
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeOutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
         wait.withMessage(error_message + '\n');
@@ -120,12 +197,12 @@ public class WikipediaSearchTests {
     }
 
     private void waitForElementPresentAndClick(By by, String error_message) {
-        WebElement element = waitForElementPresent(by, error_message, 5);
+        WebElement element = waitForElementPresent(by, error_message, 10);
         element.click();
     }
 
     private void waitForElementPresentAndSendKeys(By by, String value, String error_message) {
-        WebElement element = waitForElementPresent(by, error_message, 5);
+        WebElement element = waitForElementPresent(by, error_message);
         element.sendKeys(value);
     }
 
@@ -160,5 +237,54 @@ public class WikipediaSearchTests {
         listElements.stream()
                 .map(el -> el.findElement(By.id("org.wikipedia:id/page_list_item_title")).getText())
                 .forEach(txt -> assertTrue(error_message, txt.contains(expectedText)));
+    }
+
+    protected void swipeUp(int timeOfSwipe) {
+        TouchAction action = new TouchAction(driver);
+        Dimension size = driver.manage().window().getSize();
+        int x = size.width / 2;
+        int start_y = (int) (size.height * 0.8);
+        int end_y = (int) (size.height * 0.2);
+
+        action
+                .press(x,start_y)
+                .waitAction(timeOfSwipe)
+                .moveTo(x, end_y)
+                .release()
+                .perform();
+    }
+
+    protected void swipeUpQuick() {
+        swipeUp(200);
+    }
+
+    protected void swipeUpToFindElement(By by, String error_message, int max_swipes) {
+
+        int already_swipe = 0;
+        while (driver.findElements(by).size() == 0) {
+            if (already_swipe > max_swipes) {
+                waitForElementPresent(by, error_message);
+                return;
+            }
+            swipeUpQuick();
+            ++already_swipe;
+        }
+    }
+
+    protected void swipeElementToLeft(By by, String error_message) {
+        WebElement element = waitForElementPresent(by, error_message, 15);
+        int left_x = (int) (element.getSize().getWidth() * 0.30);
+        int right_x = (int) (element.getSize().getWidth() * 0.70);
+        int upper_y = element.getLocation().getY();
+        int lower_y = upper_y + element.getSize().getHeight();
+        int middle_y = (upper_y + lower_y) / 2;
+
+        TouchAction action = new TouchAction(driver);
+        new TouchAction(driver)
+                .press(right_x, middle_y)
+                .waitAction(500)
+                .moveTo(left_x, middle_y)
+                .release()
+                .perform();
     }
 }
