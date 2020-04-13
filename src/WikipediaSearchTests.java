@@ -50,7 +50,7 @@ public class WikipediaSearchTests {
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Button for setup skip not found");
 
-        searchArticles("JAVA");
+        searchArticle("Java");
 
         //В установленной мной версии приложения(последней) нет id контейнера у позиции результата поиска
         waitForElementPresent(
@@ -66,7 +66,7 @@ public class WikipediaSearchTests {
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Button for setup skip not found");
 
-        searchArticles("JAVA");
+        searchArticle("Java");
 
         //В установленной мной версии приложения(последней) нет id контейнера у позиции результата поиска
         waitForElementsPresent(
@@ -92,19 +92,13 @@ public class WikipediaSearchTests {
     }
 
     @Test
-    public void swipeArticleTest() {
+    public void swipeArticlesTest() {
 
         waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Button for setup skip not found");
 
-        searchArticles("Appium");
-
-        //В установленной мной версии приложения(последней) нет id контейнера у позиции результата поиска
-        waitForElementPresentAndClick(
-                By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_title' and @text = 'Appium']"),
-                "Article not found"
-        );
+        searchArticle("Appium");
 
         swipeUpToFindElement(
                 By.xpath("//*[@text = 'View page in browser']"),
@@ -120,12 +114,7 @@ public class WikipediaSearchTests {
                 By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
                 "Button for setup skip not found");
 
-        searchArticles("Appium");
-
-        waitForElementPresentAndClick(
-                By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_title' and @text = 'Appium']"),
-                "Article not found"
-        );
+        searchAndOpenArticle("Appium");
 
         waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/article_menu_bookmark"),
@@ -181,7 +170,7 @@ public class WikipediaSearchTests {
 
     }
 
-    private void searchArticles(String articleName) {
+    private void searchArticle(String articleName) {
 
         waitForElementPresentAndClick(
                 By.id("org.wikipedia:id/search_container"),
@@ -191,6 +180,21 @@ public class WikipediaSearchTests {
                 By.id("org.wikipedia:id/search_plate"),
                 articleName,
                 "Search field not found");
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_title' and @text ='" + articleName + "']"),
+                "Article not found"
+        );
+    }
+
+    private void searchAndOpenArticle(String articleName) {
+
+        searchArticle(articleName);
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_title' and @text ='" + articleName + "']"),
+                "Article not found"
+        );
     }
 
     private WebElement waitForElementPresent(By by, String error_message, long timeOutInSeconds) {
