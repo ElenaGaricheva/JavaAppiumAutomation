@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.pagefactory.ByAll;
@@ -259,6 +260,23 @@ public class WikipediaSearchTests {
         );
     }
 
+    @Test
+    public void checkArticleTitle() {
+
+        String articleName = "Appium";
+
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Button for setup skip not found");
+
+        searchAndOpenArticle(articleName);
+
+        assertElementPresent(
+                By.xpath("//*[@class = 'android.view.View' and @text = '" + articleName + "']"),
+                "Expected element not found"
+                );
+    }
+
     private void searchArticle(String articleName) {
 
         waitForElementPresentAndClick(
@@ -333,6 +351,15 @@ public class WikipediaSearchTests {
         listElements.stream()
                 .map(el -> el.findElement(By.id("org.wikipedia:id/page_list_item_title")).getText())
                 .forEach(txt -> assertTrue(error_message, txt.contains(expectedText)));
+    }
+
+    private void assertElementPresent(By by, String error_message) {
+        try {
+            driver.findElement(by);
+        }
+        catch (NoSuchElementException e) {
+            throw new AssertionError(error_message);
+        }
     }
 
     protected void swipeUp(int timeOfSwipe) {
