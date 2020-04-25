@@ -36,6 +36,25 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject.checkListOfSearchResult();
 
         SearchPageObject.checkTitleOfEachElementsOfList(articleName);
-        SearchPageObject.clickCancelButton();
+    }
+
+    @Test
+    public void testSearchDifferentArticles() {
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        NavigationUI NavigationUI = new NavigationUI(driver);
+
+        NavigationUI.setupSkip();
+
+        SearchPageObject.searchArticle("Appium");
+
+        SearchPageObject.checkNumberOfSearchResult(3);
+
+        SearchPageObject.clickSearchCancelButton();
+
+        SearchPageObject.searchArticle("Java (programming language)", "Object-oriented programming language");
+
+        SearchPageObject.checkNumberOfSearchResult(3);
+
+        SearchPageObject.clickSearchCancelButton();
     }
 }

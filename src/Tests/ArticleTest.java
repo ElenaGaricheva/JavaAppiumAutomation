@@ -62,12 +62,13 @@ public class ArticleTest extends CoreTestCase {
         BookmarkPageObject BookmarkPageObject = new BookmarkPageObject(driver);
 
         String firstArticle = "Java (programming language)";
+        String firstArticleDesc = "Object-oriented programming language";
         String secondArticle = "Appium";
         String listName = "Saved";
 
         NavigationUI.setupSkip();
 
-        SearchPageObject.searchAndOpenArticle(firstArticle);
+        SearchPageObject.searchAndOpenArticle(firstArticle, firstArticleDesc);
 
         NavigationUI.clickBookmarkButton();
 
@@ -78,7 +79,7 @@ public class ArticleTest extends CoreTestCase {
 
         NavigationUI.returnToSearchPage();
 
-        SearchPageObject.clickCancelButton();
+        SearchPageObject.clickSearchCancelButton();
 
         SearchPageObject.searchAndOpenArticle(secondArticle);
 
