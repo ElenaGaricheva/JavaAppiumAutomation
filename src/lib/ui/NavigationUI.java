@@ -9,7 +9,7 @@ public class NavigationUI extends MainPageObject {
             BOOKMARK_BUTTON = "org.wikipedia:id/article_menu_bookmark",
             MORE_OPTIONS_BUTTON = "org.wikipedia:id/page_toolbar_button_show_overflow_menu",
             READING_LIST_BUTTON = "org.wikipedia:id/page_action_overflow_reading_lists",
-            RETURN_TO_SEARCH_BUTTON = "//*[@content-desc = 'Navigate up']",
+            RETURN_TO_SEARCH_BUTTON = "//*[@content-desc='Navigate up']",
             SKIP_SETUP_ONBOARDING = "org.wikipedia:id/fragment_onboarding_skip_button";
 
     public NavigationUI(AppiumDriver driver){
