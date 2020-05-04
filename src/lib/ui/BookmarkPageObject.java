@@ -6,9 +6,9 @@ import org.openqa.selenium.By;
 public class BookmarkPageObject extends MainPageObject {
 
     private static final String
-            BOOKMARK_LIST = "//*[@resource-id = 'org.wikipedia:id/item_title' and @text = '{listName}']",
-            SAVED_ARTICLE = "//*[@resource-id = 'org.wikipedia:id/page_list_item_title' and @text = '{articleName}']",
-            SKIP_ONBOARDING_BUTTON = "//*[@resource-id = 'android:id/button2' and @text = 'NO THANKS']";
+            BOOKMARK_LIST = "xpath://*[@resource-id = 'org.wikipedia:id/item_title' and @text = '{listName}']",
+            SAVED_ARTICLE = "xpath://*[@resource-id = 'org.wikipedia:id/page_list_item_title' and @text = '{articleName}']",
+            SKIP_ONBOARDING_BUTTON = "xpath://*[@resource-id = 'android:id/button2' and @text = 'NO THANKS']";
 
     public BookmarkPageObject(AppiumDriver driver) {
         super(driver);
@@ -26,7 +26,7 @@ public class BookmarkPageObject extends MainPageObject {
     public void selectListOfSavedArticles(String listName) {
         String listNameXpath = getListName(listName);
         this.waitForElementPresentAndClick(
-                By.xpath(listNameXpath),
+                listNameXpath,
                 "Test list not found"
         );
     }
@@ -34,7 +34,7 @@ public class BookmarkPageObject extends MainPageObject {
     public void waitForSavedArticleAndAppear(String articleName) {
         String articleNameXpath = getArticleName(articleName);
         this.waitForElementPresent(
-                By.xpath(articleNameXpath),
+                articleNameXpath,
                 "Saved article not found"
         );
     }
@@ -42,7 +42,7 @@ public class BookmarkPageObject extends MainPageObject {
     public void selectSavedArticle(String articleName) {
         String articleNameXpath = getArticleName(articleName);
         this.waitForElementPresentAndClick(
-                By.xpath(articleNameXpath),
+                articleNameXpath,
                 "Saved article not found"
         );
     }
@@ -51,7 +51,7 @@ public class BookmarkPageObject extends MainPageObject {
         String articleNameXpath = getListName(articleName);
 
         waitForElementNotPresent(
-                By.xpath(articleNameXpath),
+                articleNameXpath,
                 "Saved article is still present on page"
         );
     }
@@ -60,7 +60,7 @@ public class BookmarkPageObject extends MainPageObject {
         String articleNameXpath = getArticleName(articleName);
 
         this.swipeElementToLeft(
-                By.xpath(articleNameXpath),
+                articleNameXpath,
                 "Saved article not found"
         );
         waitForSavedArticleAndDisappear(articleName);
@@ -68,7 +68,7 @@ public class BookmarkPageObject extends MainPageObject {
 
     public void skipSyncReadingList() {
         this.waitForElementPresentAndClick(
-                By.xpath(SKIP_ONBOARDING_BUTTON),
+                SKIP_ONBOARDING_BUTTON,
                 "Button for dismiss sync reading list not found"
         );
     }

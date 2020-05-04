@@ -11,12 +11,12 @@ import java.util.List;
 public class SearchPageObject extends MainPageObject {
 
     private static final String
-            SEARCH_INPUT_ELEMENT = "org.wikipedia:id/search_container",
-            SEARCH_INPUT = "org.wikipedia:id/search_plate",
-            SEARCH_RESULT_BY_TPL = "//*[@resource-id = 'org.wikipedia:id/page_list_item_title' and @text ='{articleName}']",
-            SEARCH_RESULT_TITLE_DESC = "//*[@resource-id = 'org.wikipedia:id/page_list_item_title' and @text ='{articleName}']/.." +
+            SEARCH_INPUT_ELEMENT = "id:org.wikipedia:id/search_container",
+            SEARCH_INPUT = "id:org.wikipedia:id/search_src_text",
+            SEARCH_RESULT_BY_TPL = "xpath://*[@resource-id = 'org.wikipedia:id/page_list_item_title' and @text ='{articleName}']",
+            SEARCH_RESULT_TITLE_DESC = "xpath://*[@resource-id = 'org.wikipedia:id/page_list_item_title' and @text ='{articleName}']/.." +
                     "//*[@resource-id='org.wikipedia:id/page_list_item_description' and @text='{articleDesc}']",
-            SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
+            SEARCH_CANCEL_BUTTON = "id:org.wikipedia:id/search_close_btn",
             ITEM_SEARCH_RESULT = "//*[@resource-id = 'org.wikipedia:id/search_results_list']//*[@class = 'android.view.ViewGroup']";
 
     public SearchPageObject(AppiumDriver driver) {
@@ -38,17 +38,17 @@ public class SearchPageObject extends MainPageObject {
     public void initSearchInput() {
 
         this.waitForElementPresentAndClick(
-                By.id(SEARCH_INPUT_ELEMENT),
+                SEARCH_INPUT_ELEMENT,
                 "Search container not found");
 
         waitForElementPresent(
-                By.id(SEARCH_INPUT),
+                SEARCH_INPUT,
                 "Search field not found");
     }
 
     public void typeSearchLine(String articleName) {
         waitForElementPresentAndSendKeys(
-                By.id(SEARCH_INPUT),
+                SEARCH_INPUT,
                 articleName,
                 "Search field not found");
     }
@@ -57,7 +57,7 @@ public class SearchPageObject extends MainPageObject {
         String searchResultXpath = getResultSearchElement(articleName);
 
         this.waitForElementPresent(
-                By.xpath(searchResultXpath),
+                searchResultXpath,
                 "Article" + articleName + "not found");
     }
 
@@ -65,7 +65,7 @@ public class SearchPageObject extends MainPageObject {
         String searchResultXpath = getResultSearchElement(articleName);
 
         this.waitForElementPresentAndClick(
-                By.xpath(searchResultXpath),
+                searchResultXpath,
                 "Article" + articleName + "not found");
     }
 
@@ -94,13 +94,13 @@ public class SearchPageObject extends MainPageObject {
     }
     public void waitForCancelButtonAndAppear() {
         this.waitForElementPresent(
-                By.id(SEARCH_CANCEL_BUTTON),
+                SEARCH_CANCEL_BUTTON,
                 "Cancel button not found");
     }
 
     public void clickSearchCancelButton() {
         this.waitForElementPresentAndClick(
-                By.id(SEARCH_CANCEL_BUTTON),
+                SEARCH_CANCEL_BUTTON,
                 "Cancel button not found");
     }
 
@@ -121,7 +121,7 @@ public class SearchPageObject extends MainPageObject {
      public void waitForElementByTitleAndDesc(String articleName, String articleDesc) {
         String searchResultXpath = getResultSearchElementByTitleAndDesc(articleName, articleDesc);
         this.waitForElementPresent(
-                By.xpath(searchResultXpath),
+                searchResultXpath,
                 "Result with expected title and desc not found"
         );
      }
@@ -129,7 +129,7 @@ public class SearchPageObject extends MainPageObject {
     public void waitForElementByTitleAndDescAndClick(String articleName, String articleDesc) {
         String searchResultXpath = getResultSearchElementByTitleAndDesc(articleName, articleDesc);
         this.waitForElementPresentAndClick(
-                By.xpath(searchResultXpath),
+                searchResultXpath,
                 "Result with expected title and desc not found"
         );
     }

@@ -6,10 +6,10 @@ import org.openqa.selenium.By;
 public class ArticlePageObject extends MainPageObject {
 
     private static final String
-            BOTTOM_ELEMENT = "//*[@text = 'View page in browser']",
-            BOOKMARK_ONBOARDING_BUTTON = "org.wikipedia:id/onboarding_button",
-            BOOKMARK_LIST = "//*[@resource-id = 'org.wikipedia:id/item_title' and @text = '{listName}']",
-            ARTICLE_TITLE = "//*[@class = 'android.view.View' and @text = '{articleTitle}']";
+            BOTTOM_ELEMENT = "xpath://*[@text = 'View page in browser']",
+            BOOKMARK_ONBOARDING_BUTTON = "id:org.wikipedia:id/onboarding_button",
+            BOOKMARK_LIST = "xpath://*[@resource-id = 'org.wikipedia:id/item_title' and @text = '{listName}']",
+            ARTICLE_TITLE = "xpath://*[@class = 'android.view.View' and @text = '{articleTitle}']";
 
      public ArticlePageObject(AppiumDriver driver) {
          super(driver);
@@ -29,7 +29,7 @@ public class ArticlePageObject extends MainPageObject {
 
     public void skipBookmarkOnboarding() {
         this.waitForElementPresentAndClick(
-                By.id(BOOKMARK_ONBOARDING_BUTTON),
+                BOOKMARK_ONBOARDING_BUTTON,
                 "Onboarding button not found"
         );
     }
@@ -37,14 +37,14 @@ public class ArticlePageObject extends MainPageObject {
     public void selectListOfSavedArticles(String listName) {
          String listNameXpath = getListName(listName);
          this.waitForElementPresentAndClick(
-                By.xpath(listNameXpath),
+                listNameXpath,
                 "List with saved articles not found"
         );
     }
 
     public void swipeToBottom() {
          this.swipeUpToFindElement(
-                 By.xpath(BOTTOM_ELEMENT),
+                 BOTTOM_ELEMENT,
                  "Link at bottom of the page not found",
                  20
          );
@@ -55,7 +55,7 @@ public class ArticlePageObject extends MainPageObject {
     public void searchArticleTitle(String articleName) {
          String articleTitleXpath = getArticleTitle(articleName);
          this.waitForElementPresent(
-                 By.xpath(articleTitleXpath),
+                 articleTitleXpath,
                  "Article name not the same secondArticleName"
          );
     }
@@ -64,7 +64,7 @@ public class ArticlePageObject extends MainPageObject {
         String articleTitleXpath = getArticleTitle(articleName);
 
         this.assertElementPresent(
-                By.xpath(articleTitleXpath),
+                articleTitleXpath,
                 "Expected element not found"
         );
     }
