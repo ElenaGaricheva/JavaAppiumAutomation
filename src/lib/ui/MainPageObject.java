@@ -65,20 +65,22 @@ public class MainPageObject {
         assertEquals(error_message, expectedText, textOfElement);
     }
 
-    public List<WebElement> waitForElementsPresent(ByAll byAll, String error_message, long timeOutInSeconds) {
+    public List<WebElement> waitForElementsPresent(String locator, String error_message, long timeOutInSeconds) {
+        ByAll byAll = new ByAll(getLocatorByString(locator));
         WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
         wait.withMessage(error_message + '\n');
         return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(byAll));
     }
 
-    public List<WebElement> waitForElementsPresent(ByAll byAll, String error_message) {
-        return waitForElementsPresent(byAll, error_message, 5);
+    public List<WebElement> waitForElementsPresent(String locator, String error_message) {
+        return waitForElementsPresent(locator, error_message, 5);
     }
 
-    public void checkTextEachElementsOfList(ByAll byAll, String expectedText, String error_message) {
-        List<WebElement> listElements = waitForElementsPresent(byAll, error_message);
+    public void checkTextEachElementsOfList(String locator, String locator_list_item, String expectedText, String error_message) {
+        List<WebElement> listElements = waitForElementsPresent(locator, error_message);
+        By list_item_title = this.getLocatorByString(locator_list_item);
         listElements.stream()
-                .map(el -> el.findElement(By.id("org.wikipedia:id/page_list_item_title")).getText())
+                .map(el -> el.findElement(list_item_title).getText())
                 .forEach(txt -> assertTrue(error_message, txt.contains(expectedText)));
     }
 

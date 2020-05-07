@@ -1,16 +1,15 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
-import org.openqa.selenium.By;
 
-public class NavigationUI extends MainPageObject {
+abstract public class NavigationUI extends MainPageObject {
 
-    private static final String
-            BOOKMARK_BUTTON = "id:org.wikipedia:id/article_menu_bookmark",
-            MORE_OPTIONS_BUTTON = "id:org.wikipedia:id/page_toolbar_button_show_overflow_menu",
-            READING_LIST_BUTTON = "id:org.wikipedia:id/page_action_overflow_reading_lists",
-            RETURN_TO_SEARCH_BUTTON = "xpath://*[@content-desc='Navigate up']",
-            SKIP_SETUP_ONBOARDING = "id:org.wikipedia:id/fragment_onboarding_skip_button";
+    protected static String
+            BOOKMARK_BUTTON,
+            MORE_OPTIONS_BUTTON,
+            READING_LIST_BUTTON,
+            RETURN_TO_SEARCH_BUTTON,
+            SKIP_SETUP_ONBOARDING;
 
     public NavigationUI(AppiumDriver driver){
         super(driver);

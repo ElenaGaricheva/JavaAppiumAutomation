@@ -6,18 +6,20 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.pagefactory.ByAll;
 
 import static org.junit.Assert.*;
+
+import java.time.Duration;
 import java.util.List;
 
-public class SearchPageObject extends MainPageObject {
+abstract public class SearchPageObject extends MainPageObject {
 
-    private static final String
-            SEARCH_INPUT_ELEMENT = "id:org.wikipedia:id/search_container",
-            SEARCH_INPUT = "id:org.wikipedia:id/search_src_text",
-            SEARCH_RESULT_BY_TPL = "xpath://*[@resource-id = 'org.wikipedia:id/page_list_item_title' and @text ='{articleName}']",
-            SEARCH_RESULT_TITLE_DESC = "xpath://*[@resource-id = 'org.wikipedia:id/page_list_item_title' and @text ='{articleName}']/.." +
-                    "//*[@resource-id='org.wikipedia:id/page_list_item_description' and @text='{articleDesc}']",
-            SEARCH_CANCEL_BUTTON = "id:org.wikipedia:id/search_close_btn",
-            ITEM_SEARCH_RESULT = "//*[@resource-id = 'org.wikipedia:id/search_results_list']//*[@class = 'android.view.ViewGroup']";
+    protected static String
+            SEARCH_INPUT_ELEMENT,
+            SEARCH_INPUT,
+            SEARCH_RESULT_BY_TPL,
+            SEARCH_RESULT_TITLE_DESC ,
+            SEARCH_CANCEL_BUTTON,
+            ITEM_SEARCH_RESULT,
+            ITEM_SEARCH_RESULT_TITLE;
 
     public SearchPageObject(AppiumDriver driver) {
         super(driver);
@@ -58,7 +60,7 @@ public class SearchPageObject extends MainPageObject {
 
         this.waitForElementPresent(
                 searchResultXpath,
-                "Article" + articleName + "not found");
+                "Article" + articleName + " not found");
     }
 
     public void waitForSearchResultAndClick(String articleName) {
@@ -106,13 +108,14 @@ public class SearchPageObject extends MainPageObject {
 
     public void checkListOfSearchResult() {
        this.waitForElementsPresent(
-                new ByAll(By.xpath(ITEM_SEARCH_RESULT)),
+                ITEM_SEARCH_RESULT,
                 "Search results list is empty"
         );
     }
      public void checkTitleOfEachElementsOfList(String articleName) {
         this.checkTextEachElementsOfList(
-                new ByAll(By.xpath(ITEM_SEARCH_RESULT)),
+                ITEM_SEARCH_RESULT,
+                ITEM_SEARCH_RESULT_TITLE,
                 articleName,
                 "Not all elements contain expected text"
         );
@@ -136,10 +139,9 @@ public class SearchPageObject extends MainPageObject {
 
     public void checkNumberOfSearchResult(Integer itemsNumber) {
         List<WebElement> listElements = this.waitForElementsPresent(
-                new ByAll(By.xpath(ITEM_SEARCH_RESULT)),
+                ITEM_SEARCH_RESULT,
                 "List of search result is empty");
-
-        assertTrue("Number of list items less than 3", (listElements.size() >= itemsNumber));
+        assertTrue("Number of list items less than" + itemsNumber, (listElements.size() >= itemsNumber));
 
     }
 }

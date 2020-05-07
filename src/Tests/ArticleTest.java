@@ -5,14 +5,16 @@ import lib.ui.ArticlePageObject;
 import lib.ui.BookmarkPageObject;
 import lib.ui.NavigationUI;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.NavigationUIFactory;
+import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
 public class ArticleTest extends CoreTestCase {
     @Test
     public void testSwipeArticles() {
 
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
-        NavigationUI NavigationUI = new NavigationUI(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
+        NavigationUI NavigationUI = NavigationUIFactory.get(driver);
         ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
 
         NavigationUI.setupSkip();
@@ -24,9 +26,9 @@ public class ArticleTest extends CoreTestCase {
 
     @Test
     public void testSaveArticleToMyListAndDelete(){
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
-        NavigationUI NavigationUI = new NavigationUI(driver);
+        NavigationUI NavigationUI = NavigationUIFactory.get(driver);
         BookmarkPageObject BookmarkPageObject = new BookmarkPageObject(driver);
 
         String listName = "Saved";
@@ -56,9 +58,9 @@ public class ArticleTest extends CoreTestCase {
     @Test
     public void testSaveTwoArticlesAndDeleteOne() {
 
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
-        NavigationUI NavigationUI = new NavigationUI(driver);
+        NavigationUI NavigationUI = NavigationUIFactory.get(driver);
         BookmarkPageObject BookmarkPageObject = new BookmarkPageObject(driver);
 
         String firstArticle = "Java (programming language)";
@@ -103,9 +105,9 @@ public class ArticleTest extends CoreTestCase {
     @Test
     public void testCheckArticleTitle() {
 
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
-        NavigationUI NavigationUI = new NavigationUI(driver);
+        NavigationUI NavigationUI = NavigationUIFactory.get(driver);
 
         String articleName = "Appium";
 

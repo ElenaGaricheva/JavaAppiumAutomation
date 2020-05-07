@@ -2,14 +2,16 @@ package Tests;
 
 import lib.CoreTestCase;
 import lib.ui.*;
+import lib.ui.factories.NavigationUIFactory;
+import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
 public class SearchTests extends CoreTestCase {
 
     @Test
     public void testSearchArticles() {
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
-        NavigationUI NavigationUI = new NavigationUI(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
+        NavigationUI NavigationUI = NavigationUIFactory.get(driver);
 
         NavigationUI.setupSkip();
 
@@ -21,8 +23,8 @@ public class SearchTests extends CoreTestCase {
     @Test
     public void testCancelSearchArticles() {
 
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
-        NavigationUI NavigationUI = new NavigationUI(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
+        NavigationUI NavigationUI = NavigationUIFactory.get(driver);
 
         String articleName = "Java";
 
@@ -40,8 +42,8 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testSearchDifferentArticles() {
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
-        NavigationUI NavigationUI = new NavigationUI(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
+        NavigationUI NavigationUI = NavigationUIFactory.get(driver);
 
         NavigationUI.setupSkip();
 
@@ -51,7 +53,7 @@ public class SearchTests extends CoreTestCase {
 
         SearchPageObject.clickSearchCancelButton();
 
-        SearchPageObject.searchArticle("Java (programming language)", "Object-oriented programming language");
+        SearchPageObject.searchArticle("Linkin Park");
 
         SearchPageObject.checkNumberOfSearchResult(3);
 
