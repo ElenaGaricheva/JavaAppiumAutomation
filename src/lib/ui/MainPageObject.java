@@ -42,9 +42,14 @@ public class MainPageObject {
         element.click();
     }
 
+    public void waitForElementPresentAndClick(String locator, String error_message, long timeOutSeconds) {
+        WebElement element = waitForElementPresent(locator, error_message, timeOutSeconds);
+        element.click();
+    }
+
     public void waitForElementPresentAndSendKeys(String locator, String value, String error_message) {
         WebElement element = waitForElementPresent(locator, error_message);
-        element.clear();
+        element.click();
         element.sendKeys(value);
     }
 
@@ -127,7 +132,7 @@ public class MainPageObject {
     }
 
     public void swipeElementToLeft(String locator, String error_message) {
-        WebElement element = waitForElementPresent(locator, error_message, 15);
+        WebElement element = waitForElementPresent(locator, error_message);
         int left_x = (int) (element.getSize().getWidth() * 0.30);
         int right_x = (int) (element.getSize().getWidth() * 0.70);
         int upper_y = element.getLocation().getY();
@@ -140,6 +145,19 @@ public class MainPageObject {
                 .waitAction(WaitOptions.waitOptions(Duration.ofMillis(500)))
                 .moveTo(PointOption.point(left_x, middle_y))
                 .release()
+                .perform();
+    }
+
+    public void clickElementToTheRigthUpperCorner(String locator, String error_message) {
+        WebElement element = waitForElementPresent(locator+ "/..", error_message);
+        int point_to_click_x = (int) (element.getSize().getWidth() * 0.90);
+        int upper_y = element.getLocation().getY();
+        int lower_y = upper_y + element.getSize().getHeight();
+        int point_to_click_y = (upper_y + lower_y) / 2;
+
+        TouchAction action = new TouchAction(driver);
+        new TouchAction(driver)
+                .tap(PointOption.point(point_to_click_x, point_to_click_y))
                 .perform();
     }
 

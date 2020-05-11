@@ -1,14 +1,17 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import lib.Platform;
 
 abstract public class NavigationUI extends MainPageObject {
 
     protected static String
             BOOKMARK_BUTTON,
+            SAVED_ARTICLES_LIST,
             MORE_OPTIONS_BUTTON,
             READING_LIST_BUTTON,
             RETURN_TO_SEARCH_BUTTON,
+            RETURN_TO_EXPLORE_BUTTON,
             SKIP_SETUP_ONBOARDING;
 
     public NavigationUI(AppiumDriver driver){
@@ -29,6 +32,20 @@ abstract public class NavigationUI extends MainPageObject {
         );
     }
 
+    public void goToMainPage() {
+        this.waitForElementPresentAndClick(
+                RETURN_TO_EXPLORE_BUTTON,
+                "Return to explore button not found"
+        );
+    }
+
+    public void goToSavedArticlesList() {
+        this.waitForElementPresentAndClick(
+                SAVED_ARTICLES_LIST,
+                "Saved articles list button not found"
+        );
+    }
+
     public void clickReadingListButton() {
         this.waitForElementPresentAndClick(
                 READING_LIST_BUTTON,
@@ -37,8 +54,14 @@ abstract public class NavigationUI extends MainPageObject {
     }
 
     public void goToReadingLists() {
-        clickMoreOptionsButton();
-        clickReadingListButton();
+        if (Platform.getInstance().isAndroid()) {
+            clickMoreOptionsButton();
+            clickReadingListButton();
+        }
+        else if (Platform.getInstance().isIOS()) {
+            goToMainPage();
+            goToSavedArticlesList();
+        }
     }
 
     public void waitForReturnToSearchButtonAndAppear() {

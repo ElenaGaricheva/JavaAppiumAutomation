@@ -1,14 +1,16 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import lib.Platform;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
-public class BookmarkPageObject extends MainPageObject {
+abstract public class BookmarkPageObject extends MainPageObject {
 
-    private static final String
-            BOOKMARK_LIST = "xpath://*[@resource-id = 'org.wikipedia:id/item_title' and @text = '{listName}']",
-            SAVED_ARTICLE = "xpath://*[@resource-id = 'org.wikipedia:id/page_list_item_title' and @text = '{articleName}']",
-            SKIP_ONBOARDING_BUTTON = "xpath://*[@resource-id = 'android:id/button2' and @text = 'NO THANKS']";
+    protected static String
+            BOOKMARK_LIST,
+            SAVED_ARTICLE,
+            SKIP_ONBOARDING_BUTTON;
 
     public BookmarkPageObject(AppiumDriver driver) {
         super(driver);
@@ -58,11 +60,13 @@ public class BookmarkPageObject extends MainPageObject {
 
     public void deleteSavedArticle(String articleName) {
         String articleNameXpath = getArticleName(articleName);
-
         this.swipeElementToLeft(
                 articleNameXpath,
                 "Saved article not found"
         );
+        if (Platform.getInstance().isIOS()) {
+            this.clickElementToTheRigthUpperCorner(articleNameXpath, "Failed to delete item");
+        }
         waitForSavedArticleAndDisappear(articleName);
     }
 

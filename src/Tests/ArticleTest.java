@@ -1,10 +1,13 @@
 package Tests;
 
 import lib.CoreTestCase;
+import lib.Platform;
 import lib.ui.ArticlePageObject;
 import lib.ui.BookmarkPageObject;
 import lib.ui.NavigationUI;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.ArticlePageObjectFactory;
+import lib.ui.factories.BookmarkPageObjectFactory;
 import lib.ui.factories.NavigationUIFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
@@ -15,7 +18,7 @@ public class ArticleTest extends CoreTestCase {
 
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         NavigationUI NavigationUI = NavigationUIFactory.get(driver);
-        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
 
         NavigationUI.setupSkip();
 
@@ -27,9 +30,9 @@ public class ArticleTest extends CoreTestCase {
     @Test
     public void testSaveArticleToMyListAndDelete(){
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
-        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         NavigationUI NavigationUI = NavigationUIFactory.get(driver);
-        BookmarkPageObject BookmarkPageObject = new BookmarkPageObject(driver);
+        BookmarkPageObject BookmarkPageObject = BookmarkPageObjectFactory.get(driver);
 
         String listName = "Saved";
         String articleName = "Appium";
@@ -59,9 +62,9 @@ public class ArticleTest extends CoreTestCase {
     public void testSaveTwoArticlesAndDeleteOne() {
 
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
-        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         NavigationUI NavigationUI = NavigationUIFactory.get(driver);
-        BookmarkPageObject BookmarkPageObject = new BookmarkPageObject(driver);
+        BookmarkPageObject BookmarkPageObject = BookmarkPageObjectFactory.get(driver);
 
         String firstArticle = "Java (programming language)";
         String firstArticleDesc = "Object-oriented programming language";
@@ -74,10 +77,11 @@ public class ArticleTest extends CoreTestCase {
 
         NavigationUI.clickBookmarkButton();
 
-        //Этот шаг актуален только при добавлении первой статьи, что мешает создать общий метод для сохранения закладки
-        ArticlePageObject.skipBookmarkOnboarding();
-
-        ArticlePageObject.selectListOfSavedArticles(listName);
+        if (Platform.getInstance().isAndroid()) {
+            //Этот шаг актуален только при добавлении первой статьи, что мешает создать общий метод для сохранения закладки
+            ArticlePageObject.skipBookmarkOnboarding();
+            ArticlePageObject.selectListOfSavedArticles(listName);
+        }
 
         NavigationUI.returnToSearchPage();
 
@@ -87,13 +91,17 @@ public class ArticleTest extends CoreTestCase {
 
         NavigationUI.clickBookmarkButton();
 
-        ArticlePageObject.selectListOfSavedArticles(listName);
+        if (Platform.getInstance().isAndroid()) {
+            ArticlePageObject.selectListOfSavedArticles(listName);
+        }
 
         NavigationUI.goToReadingLists();
 
         BookmarkPageObject.skipSyncReadingList();
 
-        BookmarkPageObject.selectListOfSavedArticles(listName);
+        if (Platform.getInstance().isAndroid()) {
+            BookmarkPageObject.selectListOfSavedArticles(listName);
+        }
 
         BookmarkPageObject.deleteSavedArticle(firstArticle);
 
@@ -106,7 +114,7 @@ public class ArticleTest extends CoreTestCase {
     public void testCheckArticleTitle() {
 
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
-        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         NavigationUI NavigationUI = NavigationUIFactory.get(driver);
 
         String articleName = "Appium";

@@ -3,13 +3,13 @@ package lib.ui;
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
 
-public class ArticlePageObject extends MainPageObject {
+abstract public class ArticlePageObject extends MainPageObject {
 
-    private static final String
-            BOTTOM_ELEMENT = "xpath://*[@text = 'View page in browser']",
-            BOOKMARK_ONBOARDING_BUTTON = "id:org.wikipedia:id/onboarding_button",
-            BOOKMARK_LIST = "xpath://*[@resource-id = 'org.wikipedia:id/item_title' and @text = '{listName}']",
-            ARTICLE_TITLE = "xpath://*[@class = 'android.view.View' and @text = '{articleTitle}']";
+    protected static String
+            BOTTOM_ELEMENT,
+            BOOKMARK_ONBOARDING_BUTTON,
+            BOOKMARK_LIST,
+            ARTICLE_TITLE;
 
      public ArticlePageObject(AppiumDriver driver) {
          super(driver);
@@ -24,8 +24,6 @@ public class ArticlePageObject extends MainPageObject {
         return ARTICLE_TITLE.replace("{articleTitle}", articleTitle);
     };
     /* TEMPLATES METHODS */
-
-
 
     public void skipBookmarkOnboarding() {
         this.waitForElementPresentAndClick(

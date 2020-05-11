@@ -53,7 +53,7 @@ public class SearchTests extends CoreTestCase {
 
         SearchPageObject.clickSearchCancelButton();
 
-        SearchPageObject.searchArticle("Linkin Park");
+        SearchPageObject.searchArticle("Java (programming language)", "Object-oriented programming language");
 
         SearchPageObject.checkNumberOfSearchResult(3);
 

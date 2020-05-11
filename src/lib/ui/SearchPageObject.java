@@ -1,13 +1,10 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.pagefactory.ByAll;
 
 import static org.junit.Assert.*;
 
-import java.time.Duration;
 import java.util.List;
 
 abstract public class SearchPageObject extends MainPageObject {
